@@ -51,13 +51,15 @@ int dab_set_length_from_i2c(struct mybuff* buff) {
 // could just read everything in a 8k slurp but that would make it
 // slow - this enables us to read exactly as many bytes as is needed
 // (except reading the size header twice)..
+//
+// return-value: negative integers for errors.
 int read_dab_packet(int fd, struct mybuff* buff) {
   char size[2];
 
   int len = read(fd, size, 2);
   if(len != 2) {
     fprintf(stderr, "error: io ac564230315f\n");
-    return 11;
+    return -EIO;
   }
 
   int packet_size =
@@ -88,7 +90,7 @@ int read_dab_packet(int fd, struct mybuff* buff) {
     fprintf(stderr, "error: io error, len ≠ packet_size %d\n", len);
     buff->data = "error b398993f07ab len ≠ packet_size";
     buff->len = strlen(buff->data);
-    return 22;
+    return -EIO;
   } else {
     // successful dab packet. double-check length header is same as
     // before:

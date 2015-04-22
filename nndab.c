@@ -66,6 +66,9 @@ int read_dab_packet(int fd, struct mybuff* buff) {
     (((unsigned char*)size)[0] << 8) +
     (((unsigned char*)size)[1] << 0);
 
+  // the strange i2c protocol tells us that if we read 0 bytes from
+  // the i2c device, it means it's because there is no data available
+  // (yet). so we need to try again later.
   if(packet_size <= 0) {
     return -EAGAIN;
   }

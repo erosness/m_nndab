@@ -114,7 +114,10 @@ void dab_flush(int fd) {
   char _data[1024];
   // note that we need content here
   struct mybuff buff = {.len = 1024, .data = _data};
-  while(read_dab_packet(fd, &buff) != -EAGAIN) { };
+
+  // keep reading dab packets while we're successfully reading them to
+  // flush the dab/i2c buffer.
+  while(read_dab_packet(fd, &buff) >= 0) { };
 }
 
 int main(int argc, char **argv) {

@@ -107,7 +107,9 @@ int read_dab_packet(int fd, struct mybuff* buff) {
     }
 
     // we have a good dab packet! remove 2-byte size header
-    buff->data = &buff->data[2];
+    buff->data = &buff->data[2]; // <--- this is very hacky! you can't
+                                 // free like this. don't modify
+                                 // anything like this
     buff->len = packet_size;
     return 0;
   }

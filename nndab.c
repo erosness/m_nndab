@@ -181,7 +181,6 @@ int main(int argc, char **argv) {
       // infinite loop.
       int ret, retries = 10000;
       while(retries > 0 && (ret = read_dab_packet(venice_fd, buff)) == -EAGAIN) {
-        fprintf(stderr, "retry %d empty packet after write, retrying\n", retries);
         retries--;
       }
 
